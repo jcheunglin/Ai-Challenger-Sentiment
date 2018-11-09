@@ -11,24 +11,25 @@ from torch.optim import Adam
 from torch.nn import CrossEntropyLoss
 from data.dataloader import generate_loader
 from config import Configure
-from networks.BiGru import BiGru
+from networks.RCNN import BiGruCNN
 from framework import MyFrame
 from utils import initLogging
 
-name = 'HAN_'
+name = 'HAN_rcnn_drop0.2'
 mylog = 'logs/'+name+'.log'
 path = 'weights/'+name+'.pkl'
 initLogging(mylog)
-device=3
+device=2
 total_epochs =30
 valid_best_score=0.
 
 train_loader, valid_loader, testa_loader = generate_loader(train_bs=32)
 opt = Configure()
-net = BiGru
+net = BiGruCNN
 loss_func = CrossEntropyLoss(size_average=True)
 solver = MyFrame(net=net,loss=loss_func,opt=opt,lr=1e-3,device=device)
-# solver.load(path)
+solver.load(path)
+# solver.net.embedding.weight.requires_grad = True
 
 no_optim_round =0
 for epoch in range(total_epochs):
@@ -53,7 +54,7 @@ for epoch in range(total_epochs):
 
     else:
         no_optim_round +=1
-        logging.info('epoch %d valid_score %.5f '%(epoch,valid_score))
+        logging.info('epoch %d valid_score %.5f '%(epoch+1,valid_score))
 
     if no_optim_round>4:
         logging.info('early stop at %d epoch' % (epoch+1))
@@ -64,9 +65,6 @@ for epoch in range(total_epochs):
         if solver.old_lr < 5e-7:
             break
         solver.load(path)
-        solver.update_lr(5.0, factor=True, mylog=mylog)
-
-
-
+        solver.update_lr(4.0, factor=True, mylog=mylog)
 
 

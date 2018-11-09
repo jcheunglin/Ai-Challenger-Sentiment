@@ -39,7 +39,7 @@ class Configure(object):
     base_num_layers = 1
     dropout = 0.
     task_hidden_size=50
-    task_num_layers =1
+    task_num_layers =2
     output_size=4
     tasks = tasks
     task_loss = torch.nn.CrossEntropyLoss()

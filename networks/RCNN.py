@@ -20,7 +20,7 @@ class BiGruCNN(nn.Module):
         super(BiGruCNN,self).__init__()
         self.tasks = opt.tasks
         # embedding
-        self.embedding = nn.Embedding(num_embeddings=opt.vocab_size,embedding_dim=opt.embed_dim)
+        self.embedding = nn.Embedding.from_pretrained(opt.vectors,freeze=True)
 
         # semantic encoder
         self.base_encoder = nn.GRU(input_size=opt.embed_dim, hidden_size=opt.base_hidden_size, num_layers=opt.base_num_layers,
@@ -45,8 +45,8 @@ class BiGruCNN(nn.Module):
         # # activate func
         # self.act = nn.LeakyReLU(negative_slope=0.05,inplace=True)
         # custom vectors
-        self.embedding.weight.requires_grad = False
-        self.embedding.weight.copy_(opt.vectors)
+        # self.embedding.weight.requires_grad = False
+        # self.embedding.weight.copy_(opt.vectors)
         # if opt.frezze:
         #     self.embedding.weight.requires_grad = False
 

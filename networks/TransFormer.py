@@ -12,12 +12,12 @@ from config import Configure
 import torch.nn.functional as F
 
 
-class Bert(nn.Module):
+class TextTransformer(nn.Module):
     """
     implementation Transformer for text classification
     """
     def __init__(self,opt,base_num_layers=4,n_heads=8,maxlen=1000):
-        super(Bert,self).__init__()
+        super(TextTransformer,self).__init__()
         self.tasks = opt.tasks
         self.pos_embedding = PosEmbedding(maxlen=maxlen,d_model=opt.embed_dim,pad_idx=0)
         self.word_embedding = nn.Embedding.from_pretrained(opt.vectors,freeze=True)
